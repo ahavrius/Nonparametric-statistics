@@ -73,5 +73,3 @@ for (n in c(5, 10, 100, 500, 1000))
 colnames(A_freq) = c("1/2 for F", "1/2 for ln(1-F)")
 rownames(A_freq) = c(5, 10, 100, 500, 1000)
 A_freq 
-
-
