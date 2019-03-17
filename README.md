@@ -14,15 +14,13 @@
 
 
 
-## Theoretical part
-
-
 ## How to use
 
 Download and install packages
 
  - [triangle](https://cran.r-project.org/web/packages/triangle/index.html)
 
+## Theoretical part
 
 
 ## Author Info
