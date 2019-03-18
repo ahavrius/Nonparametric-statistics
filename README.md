@@ -20,6 +20,9 @@ Download and install packages
 
  - [triangle](https://cran.r-project.org/web/packages/triangle/index.html)
 
+ ```install.packages("~/Downloads/triangle_0.12.tar", repos = NULL, type="source")```
+
+
 ## Theoretical part
 
 
