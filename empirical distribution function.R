@@ -8,15 +8,15 @@ qfunc = function(p, min, max) qtriangle(p, min, max)  #quantile function
 pfunc = function(t, min, max) ptriangle(t, min, max)  #distribution function
 rfunc = function(n, min, max) rtriangle(n, min, max)  #generates random deviates
 
-Femp = function(x, sample) mean(sample < x)  #simple empirical function = use if you need it one time
+Femp = function(x, sample) mean(sample < x)           #simple empirical function = use if you need it one time
 
-Femp_generator = function(x) {               #generator of Empirical distribution function
+Femp_generator = function(x) {                        #generator of Empirical distribution function
   n = length(x)
   x = c(-Inf, sort(x))
   f = (0 : n) / n
   function(t){f[findInterval(t, x)]}
 }
-Fconf = function(x, sample, alpha, func){    #calculation of Confidence interval
+Fconf = function(x, sample, alpha, func){             #calculation of Confidence interval
   lambda = qnorm(1 - alpha/2)
   Fnx = func(x, sample)
   stand = sqrt(Fnx * (1 - Fnx) / length(sample)) * lambda
