@@ -59,8 +59,7 @@ A_freq = matrix(ncol = 2, nrow = 0)     #matrix of frequency
 
 matplot(tt, pfunc(tt, t0, t1), col = color, type = "l")             #draw the real distribution function
 
-for (n in c(5, 10, 100, 500, 1000))
-{
+for (n in c(5, 10, 100, 500, 1000)) {
   color = color + 1
   F = rfunc(n, t0, t1)                  #real sample
   G = rcensor(n, t0, t1)                #censoring sample
