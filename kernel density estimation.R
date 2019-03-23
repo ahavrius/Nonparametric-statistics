@@ -5,10 +5,10 @@ alpha = 0.05   #significance level
 n = 500
 location_ = 0
 scale_ = 1
-#qfunc = function(p, location, scale) qalaplace(p, location, scale)  #quantile function
+qfunc = function(p, location, scale) qalaplace(p, location, scale)  #quantile function
 dfunc = function(x, location, scale) dalaplace(x, location, scale)  #density function
 pfunc = function(t, location, scale) palaplace(t, location, scale)  #distribution function
-#rfunc = function(n, location, scale) ralaplace(n, location, scale)  #generates random deviates
+rfunc = function(n, location, scale) ralaplace(n, location, scale)  #generates random deviates
 kernel = function(x) dnorm(x, mean = 0, sd = 1)                     #kernel density function
 
 t0 = -2
@@ -55,8 +55,8 @@ cv_gener = function(kernel, kernel_tilda, k_0, sample) {   #cross-validation fun
     sum_k = 0
     sum_k_tilda = 0
     i = 1
-    j = 1
     while (i < n) {
+      j = 1
       while (j < i) {
         sum_k = sum_k + kernel((sample[i] - sample[j]) / h)
         sum_k_tilda = sum_k_tilda + kernel_tilda((sample[i] - sample[j]) / h)
@@ -71,13 +71,23 @@ cv_gener = function(kernel, kernel_tilda, k_0, sample) {   #cross-validation fun
     k_0 / (h*n) + 2*sum_prepared[1] / (h*n^2) - 4*sum_prepared[2] / (n*(n-1)*h)
   }
 }
-smooth_cv = function(func, value) nlm(func, value)$estimate
+#smooth_cv = function(func, value) nlm(func, value)$estimate
 
-X = sapply(tt, pfunc, location = location_, scale = scale_)
+smooth_cv_interval = function(func, value) {
+ interval = seq(value/3, 3 * value, by = 0.001)
+ print(length(interval))
+ #output = func(interval)
+ output = sapply(interval, func)
+ interval[which.min(output)]
+}
+
+
+X = sapply(n, rfunc, location = location_, scale = scale_)
 density_silverman_simple = kernel_density_gener(X, kernel, smooth_silverman_simple(d_2, D, X))
 density_silverman_advanced = kernel_density_gener(X, kernel, smooth_silverman_advanced(d_2, D, X))
 cv = cv_gener(kernel, kernel_tilda, kernel_tilda_0, X)
-smooth_cv_here = smooth_cv(cv, smooth_silverman_simple(d_2, D, X))
+#too long
+smooth_cv_here = smooth_cv_interval(cv, 0.1)
 density_cv = kernel_density_gener(X, kernel, smooth_cv_here)
 matplot(tt, dfunc(tt, location_, scale_), ylim = c(0, 3), col = 1, type = "l")                      #draw the real density function
 lines(tt, sapply(tt, density_silverman_simple), col = 2)                                            #draw Silverman simple density estimation
