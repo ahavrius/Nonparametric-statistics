@@ -2,7 +2,7 @@ library(LaplacesDemon)
 
 #Statistical parameters
 alpha = 0.05   #significance level
-n = 500
+n = 100
 location_ = 0
 scale_ = 1
 qfunc = function(p, location, scale) qalaplace(p, location, scale)  #quantile function
@@ -87,9 +87,10 @@ density_silverman_simple = kernel_density_gener(X, kernel, smooth_silverman_simp
 density_silverman_advanced = kernel_density_gener(X, kernel, smooth_silverman_advanced(d_2, D, X))
 cv = cv_gener(kernel, kernel_tilda, kernel_tilda_0, X)
 #too long
-smooth_cv_here = smooth_cv_interval(cv, 0.1)
+smooth_cv_here = smooth_cv_interval(cv, 0.2) ## 0.25 -> 0.274333
+#smooth_cv_here = 0.15
 density_cv = kernel_density_gener(X, kernel, smooth_cv_here)
-matplot(tt, dfunc(tt, location_, scale_), ylim = c(0, 3), col = 1, type = "l")                      #draw the real density function
+matplot(tt, dfunc(tt, location_, scale_), col = 1, type = "l")                      #draw the real density function
 lines(tt, sapply(tt, density_silverman_simple), col = 2)                                            #draw Silverman simple density estimation
 lines(tt, sapply(tt, density_silverman_advanced), col = 3)                                          #draw Silverman advanced density estimation
 lines(tt, sapply(tt, density_cv), col = 4)                                                          #draw Cross-validation density estimation
