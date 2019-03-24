@@ -24,11 +24,12 @@ Fconf = function(x, sample, alpha, func){             #calculation of Confidence
 }
 #Assignment of variables
 color = 1
-tt = seq(qfunc(0.01, t0, t1), qfunc(0.99, t0, t1), 0.01)              #interval
-x_value =c(qfunc(1/3, t0, t1), qfunc(1,t0, t1), qfunc(2/3, t0, t1))   #x of quantile level = 1/3, 1, 2/3
-A_freq = matrix(ncol = length(x_value), nrow = 0)                     #matrix of frequency
+tt = seq(qfunc(0.01, t0, t1), qfunc(0.99, t0, t1), 0.01)                    #interval
+x_value =c(qfunc(1/3, t0, t1), qfunc(1,t0, t1), qfunc(2/3, t0, t1))         #x of quantile level = 1/3, 1, 2/3
+A_freq = matrix(ncol = length(x_value), nrow = 0)                           #matrix of frequency
 
-matplot(tt, sapply(tt, pfunc, min = t0, max = t1), col = color, type = "l")      #ploting the real distribution function
+matplot(tt, sapply(tt, pfunc, min = t0, max = t1),                          #ploting the real distribution function
+col = color, type = "l", main = "Density functions", xlab = "", ylab = "")  #title
 
 for (n in c(5, 10, 100, 500, 1000))
 {

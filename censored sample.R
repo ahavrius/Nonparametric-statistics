@@ -57,8 +57,8 @@ x_value = qfunc(1/2, t0, t1)            #x of quantile level = 1/2
 f_x = pfunc(x_value, t0, t1)            # = 1/2
 A_freq = matrix(ncol = 2, nrow = 0)     #matrix of frequency
 
-matplot(tt, pfunc(tt, t0, t1), col = color, type = "l")             #draw the real distribution function
-
+matplot(tt, pfunc(tt, t0, t1), col = color, type = "l",             #draw the real distribution function
+        main = "Density functions", xlab = "", ylab = "")           #title
 for (n in c(5, 10, 100, 500, 1000)) {
   color = color + 1
   F = rfunc(n, t0, t1)                  #real sample

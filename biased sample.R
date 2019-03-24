@@ -69,9 +69,11 @@ Femp = Femp_general(X_abs)                              #Empirical distribution 
 F_HT = F_HT_general(X_shift, t1)                        #Horwitz-Thompson estimation based on X_shift sample
 F_Vardi = F_Vardi_general(X_abs, X_shift)               #Vardi estimation based on  X_abs + X_shift samples
 
-matplot(tt, pfunc(tt, t0, t1), col = 1, type = "l")     #draw the real distribution function
+matplot(tt, pfunc(tt, t0, t1), col = 1, type = "l",     #draw the real distribution function
+main = "Distribution functions", xlab = "", ylab = "")  #title
 lines(tt, sapply(tt, Femp), col = 2)                    #draw Empirical distribution
 lines(tt, sapply(tt, F_HT), col = 3)                    #draw Horwitz-Thompson estimation
 lines(tt, sapply(tt, F_mean, f1 = Femp, f2 = F_HT), col = 4)
 lines(tt, sapply(tt, F_Vardi), col = 5)                 #draw Vardi estimation
 legend("bottomright",col=1:5, legend=c("real","Femp", "F_HT", "1/2(Femp + F_HT)", "F_Vardi"), lty=c(1,1,1,1,1))
+
