@@ -2,25 +2,27 @@ library(LaplacesDemon)
 library(Deriv)
 
 #Statistical parameters
-n = 100                                                             #sample size
+n = 100                                                            #sample size
 location = 0                                                       #parameters
-scale = 1                                                          # of sample
-dfunc = function(x) dalaplace(x, location, scale)  #density function
-rfunc = function(n) ralaplace(n, location, scale)  #generates random deviates
-kernel = function(x) dnorm(x, mean = 0, sd = 1)                     #kernel density function
+scale = 1                                                          # of distribution
+dfunc = function(x) dalaplace(x, location, scale)                  #density function
+rfunc = function(n) ralaplace(n, location, scale)                  #generates random deviates
+kernel = function(x) dnorm(x, mean = 0, sd = 1)                    #kernel density function
+density = function(x) exp(-abs(x))/2                               #real density explicitly 
 t0 = -2
 t1 = 2
 tt = seq(t0, t1, 0.01)
 
-kernel_tilda = function(u) {
-  func = function(x) kernel(x) * kernel(x + u)
-  integrate(func, -Inf, Inf)$value
-}
-d_2_calculate = function(kernel) {                 #calculation of d^2 = integral of K^2(x)dx
+kernel_tilda = function(u) dnorm(u, mean = 0, sd = sqrt(2))       #here's normal kernel, Convolution of norm = norm
+#kernel_tilda = function(u) {                                     #how to calculate in general
+#  func = function(x) kernel(x) * kernel(x + u)
+#  integrate(func, -Inf, Inf)$value
+#}
+d_2_calculate = function(kernel) {                                #calculation of d^2 = integral of K^2(x)dx
   func = function(x) kernel(x) * kernel(x)
   integrate(func, -Inf, Inf)$value
 }
-D_caclulate = function(kernel) {                   #calculation D = integral of x^2 K(x)dx
+D_caclulate = function(kernel) {                                  #calculation D = integral of x^2 K(x)dx
   func = function(x) kernel(x)*x^2
   integrate(func, -Inf, Inf)$value
 }
@@ -52,15 +54,12 @@ cv_gener = function(kernel, kernel_tilda, k_0, sample) {   #cross-validation fun
   two_sums = function(h) {
     sum_k = 0
     sum_k_tilda = 0
-    i = 1
-    while (i < n) {
-      j = 1
-      while (j < i) {
-        sum_k = sum_k + kernel((sample[i] - sample[j]) / h)
-        sum_k_tilda = sum_k_tilda + kernel_tilda((sample[i] - sample[j]) / h)
-        j = j + 1
-      }
-      i = i + 1
+    for (i in 1:(n-1)) {
+      if (i != 1)
+        for (j in 1:(i-1)) {
+          sum_k = sum_k + kernel((sample[i] - sample[j]) / h)
+          sum_k_tilda = sum_k_tilda + kernel_tilda((sample[i] - sample[j]) / h)
+        }
     }
     c(sum_k_tilda, sum_k)
   }
@@ -70,9 +69,8 @@ cv_gener = function(kernel, kernel_tilda, k_0, sample) {   #cross-validation fun
   }
 }
 #smooth_cv_min = function(func, value) nlm(func, value)$estimate  #works more precise but too slow
-smooth_cv_interval = function(func, value) {
+smooth_cv_interval = function(func, value) {               #minimum of cross-validation functional
  interval = seq(value/3, 3*value, by = 0.01)
- print(length(interval))
  output = sapply(interval, func)
  plot(interval, output)
  interval[which.min(output)]
@@ -82,8 +80,8 @@ X = rfunc(n)
 density_silverman_simple = kernel_density_gener(X, kernel, smooth_silverman_simple(d_2, D, X))
 density_silverman_advanced = kernel_density_gener(X, kernel, smooth_silverman_advanced(d_2, D, X))
 density_nonparam = kernel_density_gener(X, kernel, smooth_nonparam(d_2, D, length(X), density_silverman_advanced))
-smooth_param = smooth_nonparam(d_2, D, n, dfunc)
-density_param = kernel_density_gener(X, kernel, smooth_param)
+#smooth_param = smooth_nonparam(d_2, D, n, density)
+#density_param = kernel_density_gener(X, kernel, smooth_param)
 
 cv = cv_gener(kernel, kernel_tilda, kernel_tilda_0, X)
 smooth_silverman = smooth_silverman_advanced(d_2, D, X)
@@ -96,7 +94,7 @@ lines(tt, sapply(tt, density_silverman_simple), col = 2)                        
 lines(tt, sapply(tt, density_silverman_advanced), col = 3)                          #draw Silverman advanced density estimation
 lines(tt, sapply(tt, density_nonparam), col = 4)                                    #drow Nonparametric density estimation
 lines(tt, sapply(tt, density_cv), col = 5)                                          #drow Cross-validation density estimation
-lines(tt, sapply(tt, density_param), col = 6)                                       #drow Parametric density estimation
+#lines(tt, sapply(tt, density_param), col = 6)                                       #drow Parametric density estimation
 
 legend("bottomright",col=1:6, legend=c("real", "Silverman simple", "Silverman advanced", "Nonparametric", "Cross-validation", "Parametric"), lty = c(1, 1, 1, 1, 1))
 

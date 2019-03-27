@@ -4,10 +4,12 @@ t0 = 0                                                      #start of interval
 t1 = 2                                                      #end of interval
 n1 = c(50, 100, 500, 1000)                                  #number of unbiased sample
 n2 = c(50, 100, 500, 1000)                                  #number of biased sample
+min = 0
+max = 2
 omega = function(x) 1 - x/2                                 #bias function
-qfunc = function(p, min, max) qtriangle(p, min, max)        #quantile function
-pfunc = function(t, min, max) ptriangle(t, min, max)        #distribution function
-rfunc = function(n, min, max) rtriangle(n, min, max)        #generates random deviates
+qfunc = function(p) qtriangle(p, min, max)                  #quantile function
+pfunc = function(t) ptriangle(t, min, max)                  #distribution function
+rfunc = function(n) rtriangle(n, min, max)                  #generates random deviates
 
 Femp_general = function(sample) {                           #generator of Empirical distribution function
   n = length(sample)
@@ -45,7 +47,7 @@ biased_sample_gen = function(n) {                           #generator of biased
   k = 1
   X = c()
   while (k <= n) {
-    templ_x = rfunc(1, t0, t1)
+    templ_x = rfunc(1)
     temp_uni = runif(1, 0, 1)
     if (temp_uni < omega(templ_x)) {
       X = c(X, templ_x)
@@ -63,8 +65,8 @@ Variance = function(sample, F_prob) {                       #calcucation of Vari
 tt = seq(t0, t1, 0.01)                                      #interval
 M_variance = matrix(nrow = length(n1), ncol = 4)            #matrix of variances
 for (k in 1:length(n1)) {
-  X_real = pfunc(tt, t0, t1)                                #real distributed sample
-  X_abs = rfunc(n1[k], t0, t1)                              #unbiased sample
+  X_real = pfunc(tt)                                        #real distributed sample
+  X_abs = rfunc(n1[k])                                      #unbiased sample
   X_shift = biased_sample_gen(n2[k])                        #biased sample
   Femp = Femp_general(X_abs)                                #Empirical distribution based on X_abs sample 
   F_HT = F_HT_general(X_shift, t1)                          #Horwitz-Thompson estimation based on X_shift sample
