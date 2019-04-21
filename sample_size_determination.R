@@ -5,8 +5,8 @@ col_residents = 3
 col_subsidies = 9
 col_income = 11
 col_rent = 19
-#DATA = read.table("/Users/ahavrius/Desktop/sampling/database.csv", header = FALSE, sep = ",")
-DATA = read.table("/Users/ahavrius/sampling/database.csv", header = FALSE, sep = ",")
+DATA = read.table("/home/asta/Nonparametric-statistics/database.csv", header = FALSE, sep = ",")
+#DATA = read.table("/Users/ahavrius/sampling/database.csv", header = FALSE, sep = ",")
 
 alpha = 0.05
 e = 0.1
@@ -47,7 +47,7 @@ values_test = Value(data_test_selected)
 variances_test = Variance(data_test_selected)
 #Confidence N of samples
 
-cv = c(sqrt(variances_test[1]) / values_test[1], sqrt(variances_test[2]) / values_test[2], sqrt(variances_test[3]) / values_test[3])
+cv = sqrt(variances_test) / values_test
 N_conf = ceiling(x^2 * cv^2 / (e^2 + cv^2 * x^2 / N_houses))
 N_conf = max(N_conf)
 
