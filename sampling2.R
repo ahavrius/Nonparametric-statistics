@@ -31,10 +31,11 @@ for (i in 1:n_jk) {
 D_jk = D_jk * (n_jk - 1)/n_jk
 
 #bootstrap
-n_bs = 5000
+n_bs = 1000
 ratio_bs = rep(0, n_bs)
 for (i in 1:n_bs) {
-  data_bs = data_test[sample(1:N_test, runif(1, min=1, max=N_test)), ]
+#  data_bs = data_test[sample(1:N_test, runif(1, min=1, max=N_test)), ]
+  data_bs = data_test[sample(1:N_test, N_test, replace = TRUE), ]
   ratio_bs[i] = sum(data_bs[,4])/sum(data_bs[,3])
 }
 #D_bs = var(ratio_bs)
