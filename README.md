@@ -24,7 +24,7 @@ Download and install packages
 
 ## Theoretical basis
 
-### Estimation of distribution function (usual sample)
+1. ### Estimation of distribution function (usual sample)
 
 Let sample X = (X1, …, Xn) be independent, identically distributed real random variables with the common cumulative distribution function F(t). For estimation F of the sample can be used the Empirical Distribution function defined as
 
@@ -40,14 +40,35 @@ Then
 
 More ditails on wiki [Empirical distribution function](https://en.wikipedia.org/wiki/Empirical_distribution_function)
 
-- #### `empirical distribution function.R` content:
-I build Empirical distibution estimators for samples  of length n = 10, 50, 100, 500, 1000 and Confidence intervals for same samples with m = 1000 - number of repetitions, check the quality of those statistics. 
+- #### `empirical_distribution.R` content:
 
-### Estimation of distribution function (censored sample)
+I build Empirical distibution estimators for samples  of length n = 10, 50, 100, 500, 1000 and Confidence intervals for those samples with m = 1000 - number of repetitions, check the quality of those statistics. 
 
-Let X = (X1, …, Xn) be a censored sample in term of Xj = min(Zj, Yj), where Zj - Observed Variable, Yj - censor, j = 1..n.
+Here's the resultiong plot 
+![Screenshot](empirical_distribution.png)
 
-In this case 
+
+2. ### Estimation of distribution function (censored sample)
+
+Let X = (X1, …, Xn) be a censored sample in term of Xj = min(Zj, Yj) - censoring, delta_j = 1{Zj < Yj} - absence of censoring indicator, where Zj - observed variable with distribution F, Yj - censor, j = 1..n.
+If the censor's distibution is unknown, Kaplan-Meier estimator (product limit estimator) helps to pridict distibution F of real not censored variables Zj.
+
+Formula: for pairs (Xj, delta_j): X[i] -  arranged in ascending order, delta_[i] - corresponding to X[i], then Kaplan-Meier estimator can be written:
+<p align = "center">
+ <img src = "https://latex.codecogs.com/svg.latex?\widehat{F}^{KM}(x)=1-\prod_{X_{i}%3C=x}{1-\frac{\delta_{[i]}}{n-i+1}}">
+</p>
+
+Kaplan-Meier estimator is asymptotically normal with asymptotical variance:
+
+<p align = "center">
+ <img src = "https://latex.codecogs.com/svg.latex?s^2_n(x,F^{KM}_n)=(1-F^{KM}_n(x))^2\sum_{j=1}^{n}\frac{\delta_{[j]}\pmb{1}(X_{[j]}\ge%20x)}{(n+1-j)(n+1-j-\delta_{[j]})}">
+</p>
+
+- #### `censored_sample.R` content:
+Analogically to `empirical_distribution.R` I build Kaplan-Meier estimators for samples  of length n = 10, 50, 100, 500, 1000 and Confidence intervals for those samples with m = 1000 - number of repetitions, check the quality of those statistics. 
+
+Here's the resultiong plot 
+![Screenshot](censored_sample.png)
 
 
 ## Author Info
