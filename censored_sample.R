@@ -60,8 +60,9 @@ f_x = pfunc(x_value)                    # = 1/2
 A_freq = matrix(ncol = 2, nrow = 0)     #matrix of frequency
 
 matplot(tt, pfunc(tt), col = color, type = "l",             #draw the real distribution function
-        main = "Density functions", xlab = "", ylab = "")   #title
-for (n in c(5, 10, 100, 500, 1000)) {
+        main = "Distribution functions", xlab = "", ylab = "")   #title
+legend("bottomright",col=1:6, legend=c("real", paste("n =", strtoi(c(10, 50, 100, 500, 1000)))), lty=c(1, 1, 1, 1, 1))
+for (n in c(10, 50, 100, 500, 1000)) {
   color = color + 1
   F = rfunc(n)                          #real sample
   G = rcensor(n)                        #censoring sample
@@ -81,7 +82,6 @@ for (n in c(5, 10, 100, 500, 1000)) {
   }
   A_freq = rbind(A_freq, amount / 1000)
 }
-legend("bottomright",col=1:6, legend=c("real", 5, 10, 100, 500, 1000), lty=c(1, 1, 1, 1, 1))
 colnames(A_freq) = c("F", "ln(1-F)")
-rownames(A_freq) = c(5, 10, 100, 500, 1000)
+rownames(A_freq) = c(10, 50, 100, 500, 1000)
 print(A_freq)
