@@ -31,9 +31,10 @@ x_value =c(qfunc(1/3), qfunc(1), qfunc(2/3))                 #x of quantile leve
 A_freq = matrix(ncol = length(x_value), nrow = 0)            #matrix of frequency
 
 matplot(tt, sapply(tt, pfunc), col = color, type = "l",      #ploting the real distribution function
-        main = "Density functions", xlab = "", ylab = "")    #title
+        main = "Distribution functions", xlab = "", ylab = "")    #title
+legend("bottomright",col=1:6, legend=c("real",paste("n =", strtoi(c(10, 50, 100, 500, 1000)))), lty = c(1, 1, 1, 1, 1))
 
-for (n in c(5, 10, 100, 500, 1000))
+for (n in c(10, 50, 100, 500, 1000))
 {
   color = color + 1
   X = rfunc(n)                                               #generate sample of n elems
@@ -49,7 +50,6 @@ for (n in c(5, 10, 100, 500, 1000))
   }
   A_freq = rbind(A_freq, amount / 1000)
 }
-legend("bottomright",col=1:6, legend=c("real", 5, 10, 100, 500, 1000), lty = c(1, 1, 1, 1, 1))
 
 colnames(A_freq) = c("1/3", "1", "2/3")
 rownames(A_freq) = c(5, 10, 100, 500, 1000)
