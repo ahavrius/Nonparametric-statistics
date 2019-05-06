@@ -35,7 +35,7 @@ empirical_bayes_classifier = function(func){
   for_max = rep(1, M)
   function(x){
     for (i in 1:M) for_max[i] = p_i[i] * func(x, i)
-    which.max(c(0, for_max)) - 1
+    which.max(c(0, for_max))-1
   }
 }
 
@@ -88,21 +88,43 @@ projected_classifier = function(sample){
   function(x) best_proj_class(sum(proj_vector[arg_max,]*x))
 }
 
+draw_line = function(angle, x0, y0)
+{
+  tt = seq(0, 100, 0.1)
+  lines(x0 + tt * sin(angle), y0 + tt*cos(angle), col = 1, type = "l")
+}
+
+draw_area = function(func){
+  size = 75
+  transparency = 0.3
+  colors = c(rgb(1, 1, 1),
+             rgb(1, 0, 0, alpha = transparency),
+             rgb(0, 1, 0, alpha = transparency),
+             rgb(0, 0, 1, alpha = transparency))
+  xx = seq(min(my_data[,2]), max(my_data[,2]), length.out = size)
+  xx = rep(xx, each=size)
+  yy = seq(min(my_data[,3]), max(my_data[,3]), length.out = size)
+  yy = rep(yy, size)
+  plot(xx, yy, pch = 16, col = colors[apply(data.frame(xx, yy), 1, func) + 1], cex = 2)
+}
+
 proj_classifier = projected_classifier(my_data)
 
 errors1 = sum(apply(my_data[, -1], 1, empirical_classifier) != my_data[,1]) / n
 errors2 = sum(apply(my_data[, -1], 1, proj_classifier) != my_data[,1]) / n
 
-tt = seq(0, 100, 0.1)
-angle = 4.7
-plot(my_data[,2], my_data[,3], type = "p", col = my_data[,1] + 1)
-lines(16 + tt * sin(angle), 105 + tt*cos(angle), col = 1, type = "l")
+plot(my_data[,2], my_data[,3], pch = 16, col = my_data[,1] + 1)
+draw_line(4.7, 16, 100)
+legend("topright",col=2:4, legend=1:3, lty = rep(1,3))
+plot(my_data[,2], my_data[,3], pch = 21, bg = my_data[,1] + 1, lwd=3, cex = 1.5,
+     col = apply(my_data[, -1], 1, empirical_classifier) + 1)
 legend("topright",col=2:4, legend=1:3, lty = rep(1,3))
 
-plot(my_data[,2], my_data[,3], type = "p", col = apply(my_data[, -1], 1, empirical_classifier) + 1)
+plot(my_data[,2], my_data[,3], pch = 21, bg = my_data[,1] + 1, lwd=3, cex = 1.5,
+     col = apply(my_data[, -1], 1, proj_classifier) + 1)
+draw_line(4.7 - pi/2, 12, 165)
 legend("topright",col=2:4, legend=1:3, lty = rep(1,3))
 
-angle = 4.7 - pi/2
-plot(my_data[,2], my_data[,3], type = "p", col = apply(my_data[, -1], 1, proj_classifier) + 1)
-legend("topright",col=2:4, legend=1:3, lty = rep(1,3))
-lines(12 + tt * sin(angle), 165 + tt*cos(angle), col = 1, type = "l")
+draw_area(empirical_classifier)
+draw_area(proj_classifier)
+
