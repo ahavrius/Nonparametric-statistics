@@ -126,5 +126,5 @@ draw_line(4.7 - pi/2, 12, 165)
 legend("topright",col=2:4, legend=1:3, lty = rep(1,3))
 
 draw_area(empirical_classifier)
-draw_area(proj_classifier)
+#draw_area(proj_classifier)
 
