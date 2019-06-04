@@ -46,5 +46,7 @@ print(cor.test(X, Y, method = 'spearman'))
 print(cor_spearman(X,Y))
 
 spearman_bs = bootstrap(X, Y, amount_bs, cor_spearman)
-t_stat = sqrt((n_sample-2)*spearman_bs^2 / (1 - spearman_bs^2))
-p_value_bs = sum(t_stat <= c_value) / amount_bs
+#t_stat = sqrt((n_sample-2)*spearman_bs^2 / (1 - spearman_bs^2))
+#p_value_bs = sum(t_stat <= c_value) / amount_bs
+
+hist(spearman_bs, breaks=10, col="blue", xlab="Coeficient of Spearman", main="Bootstrap")
